@@ -1,13 +1,6 @@
-/*
-	 WARNING !
-
-	 DO NOT MODIFY CODES BELOW!
-*/
-
 #ifdef _WIN32
 #include <windows.h>
 #endif
-//#include "class_Visualization.h"
 #include "driver_cruise.h"
 #include "stdio.h"
 #include <ostream>
@@ -19,11 +12,11 @@
 #define PI 3.141592653589793238462643383279
 
 static void userDriverGetParam(float midline[200][2], float yaw, float yawrate, float speed, float acc, float width, int gearbox, float rpm);
-static void userDriverSetParam(float *cmdAcc, float *cmdBrake, float *cmdSteer, int *cmdGear); //ţɲת򣬵λ
+static void userDriverSetParam(float *cmdAcc, float *cmdBrake, float *cmdSteer, int *cmdGear);
 static int InitFuncPt(int index, void *pt);
 
 // Module Entry Point
-extern "C" int driver_cruise(tModInfo *modInfo) //ʼ
+extern "C" int driver_cruise(tModInfo *modInfo) 
 {
 	memset(modInfo, 0, 10 * sizeof(tModInfo));
 	modInfo[0].name = "driver_cruise";				 // name of the module (short).
@@ -35,7 +28,7 @@ extern "C" int driver_cruise(tModInfo *modInfo) //ʼ
 }
 
 // Module interface initialization.
-static int InitFuncPt(int, void *pt) //ʼ
+static int InitFuncPt(int, void *pt) 
 {
 	tUserItf *itf = (tUserItf *)pt;
 	itf->userDriverGetParam = userDriverGetParam;
@@ -43,28 +36,20 @@ static int InitFuncPt(int, void *pt) //ʼ
 	return 0;
 }
 
-/*
-	 WARNING!
+//**********Global variables for vehicle states*********
+static float _midline[200][2];							
+static float _yaw, _yawrate, _speed, _acc, _width, _rpm; 
+static int _gearbox;									 
+//******************************************************
 
-	 DO NOT MODIFY CODES ABOVE!
-*/
-
-//**********Global variables for vehicle states*********//
-static float _midline[200][2];							 //ߵٸ
-static float _yaw, _yawrate, _speed, _acc, _width, _rpm; //
-static int _gearbox;									 //
-//******************************************************//
-
-bool parameterSet = false; //Ƿõı־
-void PIDParamSetter();	   //PIDú
-
-//******************************************************//
-typedef struct Circle //ԲĽṹ
-{					  //
-	double r;		  //
-	int sign;		  //
-} circle;			  //
-//******************************************************//
+bool parameterSet = false; 
+void PIDParamSetter();	  
+typedef struct Circle 
+{					  
+	double r;		  
+	int sign;		  
+} circle;			 
+//******************************************************
 
 double kp_s; //kp for speed
 double ki_s; //ki for speed
@@ -143,7 +128,7 @@ static void userDriverGetParam(float midline[200][2], float yaw, float yawrate, 
 {
 
 	for (int i = 0; i < 200; ++i)
-		_midline[i][0] = midline[i][0], _midline[i][1] = midline[i][1]; //
+		_midline[i][0] = midline[i][0], _midline[i][1] = midline[i][1]; 
 	_yaw = yaw;
 	_yawrate = yawrate;
 	_speed = speed;
